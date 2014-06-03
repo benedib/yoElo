@@ -3,7 +3,7 @@
 describe('Controller: GameCtrl', function () {
 
   // load the controller's module
-  beforeEach(module('yoMeanApp'));
+  beforeEach(module('yoEloApp'));
 
   var GameCtrl,
     scope;
