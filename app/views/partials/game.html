@@ -1,0 +1,100 @@
+
+<div ng-include="'partials/navbar.html'"></div>
+
+<h1>{{game.name}}</h1>
+
+<!-- Button trigger modal -->
+<button class="btn btn-success btn-lg" data-toggle="modal" data-target="#myModal">
+  + New Game
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">New Game of {{game.name}}</h4>
+      </div>
+      <div class="modal-body">
+
+  <!-- <div class="row">
+    <div class="col-xs-6">
+      <div class="list-group">
+        <span ng-repeat="i in game.players track by $index">
+          <a class="list-group-item">{{i.email}}</a>
+        </span>
+      </div>
+    </div>
+  <div class="col-xs-6">.col-xs-6
+
+  </div>
+</div> -->
+<div class="row">
+  <div class="col-xs-6">
+<div ui-tree>
+  <ol ui-tree-nodes="" ng-model="playerList" class="list-group">
+    <li ng-repeat="item in playerList" ui-tree-node class="list-group-item">
+      <div ui-tree-handle>
+        {{item.email}}
+      </div>
+    </li>
+  </ol>
+</div>
+</div>
+
+<div class="col-xs-6">
+<div ui-tree>
+  <ol ui-tree-nodes="" ng-model="winners" class="list-group">
+    <li ng-repeat="item in winners track by $index" ui-tree-node class="list-group-item">
+      <div ui-tree-handle>
+        <span class="badge alert-info">{{$index + 1}}</span>{{item.email}}
+      </div>
+    </li>
+  </ol>
+</div>
+</div>
+
+</div>
+
+
+
+  <div class="col-lg-6">
+    <div class="input-group">
+      <input type="text" class="form-control" placeholder="New player email" ng-model="newPlayerEmail">
+      <span class="input-group-btn">
+        <button class="btn btn-default" type="button" ng-click="addPlayerToGame()">Add!</button>
+      </span>
+
+    </div><!-- /input-group -->
+  </div><!-- /.col-lg-6 -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" ng-click="postGame()">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<table class="table table-hover">
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Email</th>
+      <th>Score</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr ng-repeat="u in game.players track by $index | orderBy: 'score'">
+      <td>{{$index + 1}}</td>
+      <td>{{u.email}}</td>
+      <td>{{u.score}}</td>
+    </tr>
+  </tbody>
+</table>
+
+
+
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>

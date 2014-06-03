@@ -1,0 +1,28 @@
+<button type="button" class="btn btn-default btn-lg toggle-nav">
+  <span class="glyphicon glyphicon-th-list"></span>
+</button>
+
+<div class="header" ng-controller="NavbarCtrl" id="site-menu">
+  <h3 class="text"><a href="/">Games</a></h3>
+  <ul class="list-group">
+    <li ng-repeat="item in menu" class="list-group-item"
+     ng-class="{active: isActive(item._id)}"
+     ng-click="showGame(item._id)">
+        {{item.name}}
+    </li>
+    <!-- <li ng-hide="currentUser" class="list-group-item" ng-class="{active: isActive('/login')}"><a href="/login">Login</a></li>
+    <li ng-hide="currentUser" class="list-group-item" ng-class="{active: isActive('/signup')}"><a href="/signup">Sign up</a></li>
+    <li ng-show="currentUser" class="list-group-item" ng-class="{active: isActive('/logout')}"><a href="" ng-click="logout()">Logout</a></li> -->
+  </ul>
+
+
+   <div class="col-lg-6">
+    <div class="input-group">
+      <input type="text" class="add-game form-control" ng-model="gameName">
+      <span class="input-group-btn">
+        <button class="btn btn-default" type="button" ng-click="addGame()">Add</button>
+      </span>
+    </div><!-- /input-group -->
+
+
+</div>
