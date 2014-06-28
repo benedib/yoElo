@@ -23,7 +23,7 @@ angular.module('yoEloApp')
       console.log('Add');
       var player = {
         email : $scope.newPlayerEmail,
-        score : 0
+        score : 1500
       };
       $http.put('/api/games/' + $routeParams.gameId, player).success(function(data) {
         console.log(data);
@@ -38,17 +38,35 @@ angular.module('yoEloApp')
     $scope.winners = [];
 
     $scope.postGame = function() {
-      console.log($scope.winners);
+      //console.log($scope.winners);
       //calculate elo and post to server.
 
-      var winners = $scope.winners;
-      console.log(winners);
+      var players = $scope.winners;
 
-      angular.forEach(winners, function(winner, count) {
-        console.log(count);
-        console.log(winner);
-        winner.score += 10;
-        $http.put('/api/games/score/' + $routeParams.gameId, winner).success(function(data) {
+      angular.forEach(players, function(currentPlayer, i) {
+          var eloChange = 0;
+
+          var winningTeams = players.slice(0,i);
+          var losingTeams = players.slice(i+1);
+
+          angular.forEach(winningTeams, function(currentWinner) {
+            eloChange += calculateWin(currentPlayer, currentWinner, false);
+          });
+
+          angular.forEach(losingTeams, function(currentLoser) {
+            eloChange += calculateWin(currentPlayer, currentLoser, true);
+          });
+
+          var oldScore = currentPlayer.score;
+          currentPlayer.score += eloChange;
+
+          console.log(
+              currentPlayer.email,
+              eloChange < 0 ? "loses" : "gains",
+              eloChange, "points",
+              oldScore, "->", currentPlayer.score);
+
+        $http.put('/api/games/score/' + $routeParams.gameId, currentPlayer).success(function(data) {
           console.log(data);
         });
 
@@ -65,4 +83,29 @@ angular.module('yoEloApp')
       populatePlayers();
     };
 
+        var calculateWin = function (user, opponent, won) {
+            var sa = won ? 1 : 0;
+            var Ka = calcK(user);
+            var Ea = calcE(user.score, opponent.score);
+            return Math.round(Ka * (sa - Ea));
+        };
+
+        var calcK = function (user) {
+            // todo K should depend on how many games user has played.
+            // currently this info is unavailable in the user object
+            var elo = user.score;
+            if (elo < 2100) {
+                return 32;
+            }
+            if (elo < 2400) {
+                return 24
+            }
+            return 16
+        };
+
+        var calcE = function (aElo, bElo) {
+            var qa = Math.pow(10, aElo / 400);
+            var qb = Math.pow(10, bElo / 400);
+            return qa / (qa + qb);
+        }
   });
