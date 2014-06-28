@@ -29,7 +29,6 @@ angular.module('yoEloApp')
       console.log(winners);
 
 
-
       var players = winners;
 
       angular.forEach(players, function(currentPlayer, i) {
@@ -51,15 +50,15 @@ angular.module('yoEloApp')
 
           console.log(
               currentPlayer.email,
-              eloChange < 0 ? "loses" : "gains",
-              eloChange, "points",
-              oldScore, "->", currentPlayer.score);
+              eloChange < 0 ? 'loses' : 'gains',
+              eloChange, 'points',
+              oldScore, '->', currentPlayer.score);
 
-        $http.put('/api/games/score/' + $routeParams.gameId, currentPlayer).success(function(data) {
-          console.log(data);
+          $http.put('/api/games/score/' + $routeParams.gameId, currentPlayer).success(function(data) {
+            console.log(data);
+          });
+
         });
-
-      } );
 
       // for (var i = 0; i < winners.length; i++) {
       //   winners[i].score += 10;
@@ -79,26 +78,26 @@ angular.module('yoEloApp')
         var Ka = calcK(user);
         var Ea = calcE(user.score, opponent.score);
         return Math.round(Ka * (sa - Ea));
-    };
+      };
 
     var calcK = function (user) {
         // todo K should depend on how many games user has played.
         // currently this info is unavailable in the user object
         var elo = user.score;
         if (elo < 2100) {
-            return 32;
+          return 32;
         }
         if (elo < 2400) {
-            return 24
+          return 24;
         }
-        return 16
-    };
+        return 16;
+      };
 
     var calcE = function (aElo, bElo) {
         var qa = Math.pow(10, aElo / 400);
         var qb = Math.pow(10, bElo / 400);
         return qa / (qa + qb);
-    };
+      };
 
 
     $scope.open = function (size) {
