@@ -5,7 +5,8 @@ angular.module('yoEloApp', [
   'ngResource',
   'ngSanitize',
   'ngRoute',
-  'ui.tree'
+  'ui.tree',
+  'ui.bootstrap'
 ])
   .config(function ($routeProvider, $locationProvider, $httpProvider) {
     $routeProvider
