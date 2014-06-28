@@ -12,7 +12,8 @@
     "angular-sanitize": ">=1.2.*",
     "angular-route": ">=1.2.*",
     "bootstrap": ">=3.1.1",
-    "angular-ui-tree" : ""
+    "angular-ui-tree" : "",
+    "angular-bootstrap": ""
   },
   "devDependencies": {
     "angular-mocks": ">=1.2.*",

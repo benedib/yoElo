@@ -4,12 +4,14 @@
 <h1>{{game.name}}</h1>
 
 <!-- Button trigger modal -->
-<button class="btn btn-success btn-lg" data-toggle="modal" data-target="#myModal">
+<!-- <button class="btn btn-success btn-lg" data-toggle="modal" data-target="#myModal">
   + New Game
-</button>
+</button> -->
+
+<button class="btn btn-success btn-lg" ng-click="open()">+ New Game</button>
 
 <!-- Modal -->
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<!-- <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -18,18 +20,6 @@
       </div>
       <div class="modal-body">
 
-  <!-- <div class="row">
-    <div class="col-xs-6">
-      <div class="list-group">
-        <span ng-repeat="i in game.players track by $index">
-          <a class="list-group-item">{{i.email}}</a>
-        </span>
-      </div>
-    </div>
-  <div class="col-xs-6">.col-xs-6
-
-  </div>
-</div> -->
 <div class="row">
   <div class="col-xs-6">
 <div ui-tree>
@@ -66,8 +56,8 @@
         <button class="btn btn-default" type="button" ng-click="addPlayerToGame()">Add!</button>
       </span>
 
-    </div><!-- /input-group -->
-  </div><!-- /.col-lg-6 -->
+    </div>
+  </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -76,6 +66,9 @@
     </div>
   </div>
 </div>
+<!-- Modal Ends -->
+
+
 
 
 <table class="table table-hover">
@@ -90,11 +83,68 @@
     <tr ng-repeat="u in game.players track by $index | orderBy: 'score'">
       <td>{{$index + 1}}</td>
       <td>{{u.email}}</td>
-      <td>{{u.score}}</td>
+      <td>{{u.score}}   <span class="label label-success" ng-if="u.eloChange > 0">{{u.eloChange}}</span>
+      <span class="label label-warning" ng-if="u.eloChange < 0">{{u.eloChange}}</span></td>
     </tr>
   </tbody>
 </table>
 
+<script type="text/ng-template" id="myModalContent.html">
+        <div class="modal-header">
+            <button type="button" class="close" ng-click="cancel()" aria-hidden="true">&times;</button>
+            <h3 class="modal-title" id="myModalLabel">New Game</h3>{{errorMsg}}
+
+
+    <div class="input-group">
+      <input type="text" ng-model="selected"
+                          id="selectedPlayer"
+                          ng-enter="addToWinners()"
+                          typeahead="player.email for player in playerList | filter:$viewValue | limitTo:8"
+                          class="form-control"
+                          placeholder="Search for email"
+                          focus="true">
+      <span class="input-group-btn">
+        <button class="btn btn-default" ng-click="addToWinners()" type="button">Add!</button>
+      </span>
+    </div>
+
+        </div>
+        <div class="modal-body">
+            <div class="row">
+          <div class="col-xs-6">
+        <div ui-tree>
+          <ol ui-tree-nodes="" ng-model="playerList" class="list-group">
+            <li ng-repeat="item in playerList" ui-tree-node class="list-group-item">
+              <div ui-tree-handle>
+                {{item.email}}
+              </div>
+            </li>
+          </ol>
+        </div>
+        </div>
+
+        <div class="col-xs-6">
+        <div ui-tree>
+          <ol ui-tree-nodes="" ng-model="winners" class="list-group">
+            <li ng-repeat="item in winners track by $index" ui-tree-node class="list-group-item">
+              <div ui-tree-handle>
+                <span class="badge alert-info">{{$index + 1}}</span>{{item.email}}
+              </div>
+            </li>
+          </ol>
+        </div>
+        </div>
+
+        </div>
+
+
+
+
+        <div class="modal-footer">
+            <button class="btn btn-primary" ng-click="ok()">OK</button>
+            <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+        </div>
+    </script>
 
 
 <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
