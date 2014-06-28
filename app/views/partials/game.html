@@ -83,7 +83,8 @@
     <tr ng-repeat="u in game.players track by $index | orderBy: 'score'">
       <td>{{$index + 1}}</td>
       <td>{{u.email}}</td>
-      <td>{{u.score}}</td>
+      <td>{{u.score}}   <span class="label label-success" ng-if="u.eloChange > 0">{{u.eloChange}}</span>
+      <span class="label label-warning" ng-if="u.eloChange < 0">{{u.eloChange}}</span></td>
     </tr>
   </tbody>
 </table>

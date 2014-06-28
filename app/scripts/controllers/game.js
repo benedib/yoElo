@@ -11,11 +11,22 @@ angular.module('yoEloApp')
     // $('#myModal').appendTo('body');
 
     // console.log($routeParams.gameId);
-    function populatePlayers() {
+    function populatePlayers(winners) {
+      console.log(winners);
       $http.get('/api/games/' + $routeParams.gameId).success(function(data) {
         console.log(data);
         $scope.game = data;
         $scope.playerList = data.players;
+        if (winners !== undefined) {
+          for(var i = 0; i < $scope.playerList.length; i++) {
+            for (var j = 0; j < winners.length; j++) {
+              if ($scope.playerList[i].email === winners[j].email) {
+                $scope.playerList[i].eloChange = winners[j].eloChange;
+              }
+            }
+          }
+        }
+
       });
     }
 
@@ -47,12 +58,17 @@ angular.module('yoEloApp')
 
           var oldScore = currentPlayer.score;
           currentPlayer.score += eloChange;
+          currentPlayer.gamesPlayed += 1;
+          currentPlayer.eloChange = eloChange;
 
           console.log(
               currentPlayer.email,
               eloChange < 0 ? 'loses' : 'gains',
               eloChange, 'points',
-              oldScore, '->', currentPlayer.score);
+              oldScore, '->', currentPlayer.score,
+              ' games played: ', currentPlayer.gamesPlayed);
+
+
 
           $http.put('/api/games/score/' + $routeParams.gameId, currentPlayer).success(function(data) {
             console.log(data);
@@ -60,15 +76,8 @@ angular.module('yoEloApp')
 
         });
 
-      // for (var i = 0; i < winners.length; i++) {
-      //   winners[i].score += 10;
-      //
-        // $http.put('/api/games/score/' + $routeParams.gameId, winners[i]).success(function(data) {
-        //   console.log(data);
-        // });
-      // }
+      populatePlayers(winners);
       $scope.winners = [];
-      populatePlayers();
 
     }
 
@@ -192,7 +201,9 @@ angular.module('yoEloApp')
 
         var player = {
           email : email,
-          score : 1500
+          score : 1500,
+          gamesPlayed : 0,
+          eloChange : 0
         };
 
         if (validateEmail(email)) {
